@@ -11,9 +11,9 @@
         stopOnFailure="false">
     <testsuites>
         <testsuite
-                name="Functional">
+                name="All Tests">
             <directory>
-                tests/Functional
+                tests
             </directory>
         </testsuite>
     </testsuites>

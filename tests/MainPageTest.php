@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Functional;
+namespace Tests;
 
 class MainPageTest extends BaseTestCase
 {

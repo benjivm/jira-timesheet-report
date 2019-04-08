@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Functional;
+namespace Tests;
 
 use PHPUnit\Framework\TestCase;
 use Slim\App;
@@ -53,16 +53,16 @@ class BaseTestCase extends TestCase
         $response = new Response();
 
         // Use the application settings
-        $settings = require __DIR__ . '/../../src/settings.php';
+        $settings = require __DIR__ . '/../src/settings.php';
 
         // Instantiate the application
         $app = new App($settings);
 
         // Set up dependencies
-        require __DIR__ . '/../../src/dependencies.php';
+        require __DIR__ . '/../src/dependencies.php';
 
         // Register routes
-        require __DIR__ . '/../../src/routes.php';
+        require __DIR__ . '/../src/routes.php';
 
         // Process the application
         $response = $app->process($request, $response);
