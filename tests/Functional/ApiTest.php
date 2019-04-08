@@ -12,7 +12,7 @@ class ApiTest extends BaseTestCase
         $response = $this->runApp('GET', '/api/issues');
 
         $this->assertEquals(200, $response->getStatusCode());
-        $this->assertStringContainsString('{"data":[{"key":"', (string) $response->getBody());
+        $this->assertEquals('application/json;charset=utf-8', $response->getHeader('content-type')[0]);
     }
 
     /**
