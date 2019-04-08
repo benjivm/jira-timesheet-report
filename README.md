@@ -1,7 +1,7 @@
 # JIRA Timesheet Report
 I was frustrated by JIRA's built-in report tools so I whipped up a simple, single project time report for a Service Desk project.
 
-![Screenshot](https://i.imgur.com/WDB6FXi.gif)
+![Screenshot](https://i.imgur.com/AzKgNWU.png)
 
 # Usage
 * Clone or download this repo somewhere accesible by your webserver or localhost, the document root needs to be set to the `public/` folder.
