@@ -39,17 +39,26 @@
 <div class="container mb-4">
     <form action="/" method="get">
         <div class="form-row">
-            <div class="form-group col-md-6">
+            <div class="form-group col-md-4">
                 <label for="createdAfter" data-toggle="tooltip" data-placement="top" title="Issue 'Created' date">From</label>
                 <input type="date" class="form-control" id="createdAfter" name="createdAfter" value="<?= $flash->getFirstMessage('createdAfter') ?>">
             </div>
-            <div class="form-group col-md-6">
+            <div class="form-group col-md-4">
                 <label for="createdBefore" data-toggle="tooltip" data-placement="top" title="Issue 'Created' date">To</label>
                 <input type="date" class="form-control" id="createdBefore" name="createdBefore" value="<?= $flash->getFirstMessage('createdBefore') ?>">
             </div>
+            <div class="form-group col-md-4">
+                <label for="status">Status</label>
+                <select name="status" id="status" class="form-control">
+                    <option value="Any"<?= $flash->getFirstMessage('status') === 'Any' ? ' selected' : null ?>>Any</option>
+                    <option value="To Do"<?= $flash->getFirstMessage('status') === 'To Do' ? ' selected' : null ?>>To Do</option>
+                    <option value="In Progress"<?= $flash->getFirstMessage('status') === 'In Progress' ? ' selected' : null ?>>In Progress</option>
+                    <option value="Done"<?= ($flash->getFirstMessage('status') === 'Done' || empty($flash->getFirstMessage('status'))) ? ' selected' : null ?>>Done</option>
+                </select>
+            </div>
         </div>
         <div class="form-row">
-            <div class="form-group col-md-6">
+            <div class="form-group col-md-4">
                 <label for="assignee">Assignee</label>
                 <select id="assignee" name="assignee" class="form-control">
                     <option value=""<?= $flash->getFirstMessage('assignee') ? null : ' selected' ?>>All</option>
@@ -60,7 +69,18 @@
                     <?php endforeach; ?>
                 </select>
             </div>
-            <div class="form-group col-md-6">
+            <div class="form-group col-md-4">
+                <label for="reporter">Reporter</label>
+                <select id="reporter" name="reporter" class="form-control">
+                    <option value=""<?= $flash->getFirstMessage('reporter') ? null : ' selected' ?>>All</option>
+                    <?php foreach ($assignees as $reporter): ?>
+                        <option value="<?= $reporter['shortName'] ?>"<?= $flash->getFirstMessage('reporter') === $reporter['shortName'] ? ' selected' : null ?>>
+                            <?= $reporter['fullName'] ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <div class="form-group col-md-4">
                 <label for="maxResults">Max Results</label>
                 <select id="maxResults" name="maxResults" class="form-control">
                     <option value="50" <?= $flash->getFirstMessage('maxResults') === '50' ? 'selected' : null ?>>50</option>
@@ -95,6 +115,8 @@
     </table>
 </div>
 
+</body>
+</html>
 <script>
     $(document).ready(function () {
         $('#issueTable').DataTable({
@@ -115,7 +137,9 @@
                 data: {
                     createdAfter: "<?= $flash->getFirstMessage('createdAfter') ?>",
                     createdBefore: "<?= $flash->getFirstMessage('createdBefore') ?>",
+                    status: "<?= $flash->getFirstMessage('status') ?>",
                     assignee: "<?= $flash->getFirstMessage('assignee') ?>",
+                    reporter: "<?= $flash->getFirstMessage('reporter') ?>",
                     maxResults: "<?= $flash->getFirstMessage('maxResults') ?>"
                 }
             },
@@ -162,5 +186,3 @@
         });
     });
 </script>
-</body>
-</html>

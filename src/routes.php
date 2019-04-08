@@ -11,7 +11,7 @@ $app->get('/', function (Request $request, Response $response) {
     }
 
     // Get project assignees for the desired role
-    $httpResponse = $this->httpClient->request('GET', 'project/' . getenv('JIRA_PROJECT') . '/role/' . getenv('JIRA_ASSIGNEE_ROLE_ID'));
+    $usersInRoleHttpResponse = $this->httpClient->request('GET', 'project/' . getenv('JIRA_PROJECT') . '/role/' . getenv('JIRA_ASSIGNEE_ROLE_ID'));
 
     // Build the assignees array
     $assignees = array_map(function ($assignee) {
@@ -19,7 +19,7 @@ $app->get('/', function (Request $request, Response $response) {
             'shortName' => $assignee['name'],
             'fullName'  => $assignee['displayName'],
         ];
-    }, $httpResponse->toArray()['actors']);
+    }, $usersInRoleHttpResponse->toArray()['actors']);
 
     // Return our home view with the data
     return $this->view->render($response, 'home.php', [
@@ -37,7 +37,7 @@ $app->group('/api', function () use ($app) {
 
         // Our query parameters for JIRA's search API
         $query = [
-            'jql'    => 'project = "' . getenv('JIRA_PROJECT') . '" AND statusCategory = Done AND timespent > 0',
+            'jql'    => 'project = "' . getenv('JIRA_PROJECT') . '" AND timespent > 0',
             'fields' => [
                 'key',
                 'issuetype',
@@ -48,28 +48,34 @@ $app->group('/api', function () use ($app) {
                 'customfield_11403', // phone
                 'created',
                 'assignee',
+                'reporter',
                 'timespent',
             ],
         ];
 
         // Append JQL statements based on query filters
-        if (! empty($request->getParam('maxResults'))) {
-            $query['maxResults'] = $request->getParam('maxResults');
-        }
-
-        if (! empty($request->getParam('assignee'))) {
-            $jql = $query['jql'] . ' AND assignee = ' . $request->getParam('assignee');
-            $query['jql'] = $jql;
-        }
-
         if (! empty($request->getParam('createdAfter'))) {
-            $jql = $query['jql'] . ' AND created >= "' . date('Y/m/d', strtotime($request->getParam('createdAfter'))) . '"';
-            $query['jql'] = $jql;
+            $query['jql'] .= sprintf(' AND created >= "%s 00:00"', date('Y/m/d', strtotime($request->getParam('createdAfter'))));
         }
 
         if (! empty($request->getParam('createdBefore'))) {
-            $jql = $query['jql'] . ' AND created <= "' . date('Y/m/d', strtotime($request->getParam('createdBefore'))) . '"';
-            $query['jql'] = $jql;
+            $query['jql'] .= sprintf(' AND created <= "%s 00:00"', date('Y/m/d', strtotime($request->getParam('createdBefore'))));
+        }
+
+        if (! empty($request->getParam('status')) && $request->getParam('status') !== 'Any') {
+            $query['jql'] .= sprintf(' AND statusCategory = "%s"', $request->getParam('status'));
+        }
+
+        if (! empty($request->getParam('assignee'))) {
+            $query['jql'] .= ' AND assignee = ' . $request->getParam('assignee');
+        }
+
+        if (! empty($request->getParam('reporter'))) {
+            $query['jql'] .= ' AND reporter = ' . $request->getParam('reporter');
+        }
+
+        if (! empty($request->getParam('maxResults'))) {
+            $query['maxResults'] = $request->getParam('maxResults');
         }
 
         // Request issues from the JIRA API
