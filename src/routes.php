@@ -62,13 +62,13 @@ $app->group('/api', function () use ($app) {
             $query['jql'] = $jql;
         }
 
-        if (! empty($request->getParam('startDate'))) {
-            $jql = $query['jql'] . ' AND created >= "' . date('Y/m/d', strtotime($request->getParam('startDate'))) . '"';
+        if (! empty($request->getParam('createdAfter'))) {
+            $jql = $query['jql'] . ' AND created >= "' . date('Y/m/d', strtotime($request->getParam('createdAfter'))) . '"';
             $query['jql'] = $jql;
         }
 
-        if (! empty($request->getParam('endDate'))) {
-            $jql = $query['jql'] . ' AND created <= "' . date('Y/m/d', strtotime($request->getParam('endDate'))) . '"';
+        if (! empty($request->getParam('createdBefore'))) {
+            $jql = $query['jql'] . ' AND created <= "' . date('Y/m/d', strtotime($request->getParam('createdBefore'))) . '"';
             $query['jql'] = $jql;
         }
 

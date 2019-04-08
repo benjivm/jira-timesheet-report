@@ -31,12 +31,12 @@ class MainPageTest extends BaseTestCase
      */
     public function testGetMainPageWithQuery()
     {
-        $response = $this->runApp('GET', '/?startDate=2019-04-01&endDate=2019-04-13&assignee=&maxResults=250');
+        $response = $this->runApp('GET', '/?createdAfter=2019-04-01&createdBefore=2019-04-13&assignee=&maxResults=250');
         
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertStringContainsString($this->project . ' Timesheet', (string) $response->getBody());
-        $this->assertStringContainsString('<input type="date" class="form-control" name="startDate" value="2019-04-01">', (string) $response->getBody());
-        $this->assertStringContainsString('<input type="date" class="form-control" name="endDate" value="2019-04-13">', (string) $response->getBody());
+        $this->assertStringContainsString('<input type="date" class="form-control" id="createdAfter" name="createdAfter" value="2019-04-01">', (string) $response->getBody());
+        $this->assertStringContainsString('<input type="date" class="form-control" id="createdBefore" name="createdBefore" value="2019-04-13">', (string) $response->getBody());
         $this->assertStringContainsString('<option value="250" selected>250</option>', (string) $response->getBody());
     }
 }

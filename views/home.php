@@ -40,12 +40,12 @@
     <form action="/" method="get">
         <div class="form-row">
             <div class="form-group col-md-6">
-                <label for="inputEmail4">Start Date</label>
-                <input type="date" class="form-control" name="startDate" value="<?= $flash->getFirstMessage('startDate') ?>">
+                <label for="createdAfter" data-toggle="tooltip" data-placement="top" title="Issue 'Created' date">From</label>
+                <input type="date" class="form-control" id="createdAfter" name="createdAfter" value="<?= $flash->getFirstMessage('createdAfter') ?>">
             </div>
             <div class="form-group col-md-6">
-                <label for="inputEmail4">End Date</label>
-                <input type="date" class="form-control" name="endDate" value="<?= $flash->getFirstMessage('endDate') ?>">
+                <label for="createdBefore" data-toggle="tooltip" data-placement="top" title="Issue 'Created' date">To</label>
+                <input type="date" class="form-control" id="createdBefore" name="createdBefore" value="<?= $flash->getFirstMessage('createdBefore') ?>">
             </div>
         </div>
         <div class="form-row">
@@ -113,8 +113,8 @@
             ajax: {
                 url: 'api/issues',
                 data: {
-                    startDate: "<?= $flash->getFirstMessage('startDate') ?>",
-                    endDate: "<?= $flash->getFirstMessage('endDate') ?>",
+                    createdAfter: "<?= $flash->getFirstMessage('createdAfter') ?>",
+                    createdBefore: "<?= $flash->getFirstMessage('createdBefore') ?>",
                     assignee: "<?= $flash->getFirstMessage('assignee') ?>",
                     maxResults: "<?= $flash->getFirstMessage('maxResults') ?>"
                 }
